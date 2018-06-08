@@ -67,7 +67,8 @@ repos:
   url: https://github.com/jlinear/DispatchApp
 
 # Style Variables
-brand_color: "#2cb34a"
+# brand_color: "#2cb34a"
+brand_color: "#3F51B5"
 
 # Offline caching
 offline_cache: false
