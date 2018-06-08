@@ -51,10 +51,9 @@ strong {
 }
 
 .site-title {
-    /*font-size: 1.625em;*/
-    font-size: 3.375em;
+    font-size: 1.75em;
     font-family: "Avenir Next", Arial, sans-serif;
-    font-weight: normal;
+    font-weight: bold;
     color: #919395;
     margin: 0;
     line-height: 1.2941176470588236;
