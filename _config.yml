@@ -21,8 +21,10 @@ baseurl: '/BlueNet_Project'
 
 # Author/Organization info to be displayed in the templates
 author:
-  name: Jlinear
-  url: http://jlinear.github.com
+  name: jlinear
+  url: http://github.com/jlinear
+  name: jtsiva
+  url: http://github.com/jtsiva
 
 # Point the logo URL at a file in your repo or hosted elsewhere by your organization
 logourl:
