@@ -46,12 +46,15 @@ navigation:
 - text: Home
   url: ./
   internal: true
-- text: Demo Page
+- text: Wiki
   url: example_page/
   internal: true
-- text: BlueNet Repo
-  url: https://github.com/cfpb/DOCter
-  internal: false
+- text: Demo
+  url: https://github.com/
+  internal: true
+- text: About
+  url: https://github.com/
+  internal: true
 
 # Repo list
 # List repos that you would like to appear on the homepage here
@@ -60,7 +63,7 @@ repos:
   description: Network layer design
   url: https://github.com/jtsiva/bluenet_stack
 - name: Dispatch App
-  description: Android Messaging Application based on BlueNet
+  description: Android App powered by BlueNet
   url: https://github.com/jlinear/DispatchApp
 
 # Style Variables
