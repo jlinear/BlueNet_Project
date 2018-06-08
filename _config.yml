@@ -38,7 +38,7 @@ univ:
 
 # Point the logo URL at a file in your repo or hosted elsewhere by your organization
 logourl: 
-logoalt: assets/img/bluenet_icon.png
+logoalt: 
 
 # Navigation
 # List links that should appear in the site sidebar here
