@@ -37,8 +37,8 @@ univ:
   url: https://www.nd.edu/
 
 # Point the logo URL at a file in your repo or hosted elsewhere by your organization
-logourl: assets/img/bluenet_icon.png
-logoalt:
+logourl: 
+logoalt: assets/img/bluenet_icon.png
 
 # Navigation
 # List links that should appear in the site sidebar here
