@@ -28,6 +28,14 @@ author_2:
   name: Jian Yang
   url: http://github.com/jlinear
 
+lab:
+  name: M-Lab
+  url: http://m-lab.cse.nd.edu/ 
+
+univ:
+  name: University of Notre Dame
+  url: https://www.nd.edu/
+
 # Point the logo URL at a file in your repo or hosted elsewhere by your organization
 logourl:
 logoalt:
