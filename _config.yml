@@ -56,9 +56,12 @@ navigation:
 # Repo list
 # List repos that you would like to appear on the homepage here
 repos:
-- name: DOCter
-  description: Jekyll template for docs
-  url: https://github.com/cfpb/DOCter
+- name: BlueNet
+  description: Network layer design
+  url: https://github.com/jtsiva/bluenet_stack
+- name: Dispatch App
+  description: Android Messaging Application based on BlueNet
+  url: https://github.com/jlinear/DispatchApp
 
 # Style Variables
 brand_color: "#2cb34a"
