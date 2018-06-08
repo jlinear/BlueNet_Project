@@ -20,11 +20,11 @@ subtitle: A Dynamic Wireless Ad-Hoc Networks Solution Using Bluetooth Low Energy
 baseurl: '/BlueNet_Project'
 
 # Author/Organization info to be displayed in the templates
-author:
-  jtsiva:
+author_1:
   name: Josh Siva
   url: http://github.com/jtsiva
-  jlinear:
+
+author_2:
   name: Jian Yang
   url: http://github.com/jlinear
 
