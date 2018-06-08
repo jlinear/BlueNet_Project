@@ -37,7 +37,7 @@ univ:
   url: https://www.nd.edu/
 
 # Point the logo URL at a file in your repo or hosted elsewhere by your organization
-logourl:
+logourl: assets/img/bluenet_icon.png
 logoalt:
 
 # Navigation
@@ -63,7 +63,7 @@ repos:
   description: Network layer design
   url: https://github.com/jtsiva/bluenet_stack
 - name: Dispatch App
-  description: Demo App powered by BlueNet
+  description: BlueNet-based Demo App
   url: https://github.com/jlinear/DispatchApp
 
 # Style Variables
