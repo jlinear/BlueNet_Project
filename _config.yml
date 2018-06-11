@@ -47,7 +47,7 @@ navigation:
   url: ./
   internal: true
 - text: Wiki
-  url: example_page/
+  url: wiki_page/
   internal: true
 - text: Demo
   url: https://github.com/
