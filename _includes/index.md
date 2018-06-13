@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 BlueNet is a wireless ad hoc network solution built upon Bluetooth Low Energy. This solution relies on the Bluetooth Generic Attribute Profile (GATT) and contains a series of protocols for multi-hop communications. BlueNet is designed with special consideration in off-the-grid network and emergency communications, and it enables dynamic and automatic network formation among BLE-equipped devices (e.g., phones, tablets, smart watches, etc). 
 The Dispatch App is an Android Messaging App that implements BlueNet, intended for scenarios where the Internet access is out of reach, for instance, in the aftermath of earthquakes, hurricanes, and other disasters. Users can find nearby users or resources on the map view of the Dispacth app and text to others for help or informaiton. The Dispatch App is compatible with most Android devices on the market (Android 6.0 and above, Bluetooth 4.1 and above).
 
