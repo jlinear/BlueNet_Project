@@ -53,7 +53,7 @@ navigation:
   url: demo_page/
   internal: true
 - text: About
-  url: https://github.com/
+  url: about_page
   internal: true
 
 # Repo list

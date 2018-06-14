@@ -1,6 +1,6 @@
 ---
 layout: page
-title:  "Wiki Page"
+title:  "Wiki"
 ---
 
 ## Protocol Proposal ##

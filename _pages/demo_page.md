@@ -1,6 +1,6 @@
 ---
 layout: page
-title:  "Demo Page"
+title:  "Demo: Dispatch App"
 ---
 
 Hey! This is the page for the app demo video and screenshots.
