@@ -50,7 +50,7 @@ navigation:
   url: wiki_page/
   internal: true
 - text: Demo
-  url: https://github.com/
+  url: demo_page/
   internal: true
 - text: About
   url: https://github.com/
