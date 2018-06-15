@@ -3,7 +3,7 @@ layout: page
 title:  "Wiki"
 ---
 
-![BlueNet](../assets/img/bluenet_icon.png)
+![BlueNet](../assets/img/wiki_logo.png)
 
 ## Table of Contents
 
