@@ -3,9 +3,9 @@ layout: page
 title:  "Wiki"
 ---
 
-[BlueNet](../assets/img/bluenet_icon.png)
+![BlueNet](../assets/img/bluenet_icon.png)
 
-# Table of Contents
+## Table of Contents
 
 [Proposal](#introduction)
 
