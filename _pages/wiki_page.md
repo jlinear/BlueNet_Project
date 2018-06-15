@@ -3,11 +3,11 @@ layout: page
 title:  "Wiki"
 ---
 
-#Table of Contents#
+# Table of Contents
 
 [Proposal](#introduction)
 
-## Protocol Proposal ## <a name="introduction"></a>
+## Protocol Proposal <a name="introduction"></a>
 
 **0.0 Overview**
 
