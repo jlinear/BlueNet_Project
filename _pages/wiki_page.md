@@ -3,7 +3,8 @@ layout: page
 title:  "Wiki"
 ---
 
-![](../assets/img/wiki_logo.png = x50)
+<img style="float: center;" src="../assets/img/wiki_logo.png" alt="bluenet" height="50px"/>
+<!-- ![](../assets/img/wiki_logo.png) -->
 
 ## Table of Contents
 
