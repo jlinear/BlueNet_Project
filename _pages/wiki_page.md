@@ -3,7 +3,7 @@ layout: page
 title:  "Wiki"
 ---
 
-<img style="text-align: center; display: inline-block;" src="../assets/img/wiki_logo.png" alt="bluenet" height="80px"/>
+<img style="margin-left: auto; margin-right: auto;" src="../assets/img/wiki_logo.png" alt="bluenet" height="75px"/>
 <!-- ![](../assets/img/wiki_logo.png) -->
 
 ## Table of Contents
