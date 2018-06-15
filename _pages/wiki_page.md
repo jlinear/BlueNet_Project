@@ -3,7 +3,7 @@ layout: page
 title:  "Wiki"
 ---
 
-![BlueNet](../assets/img/wiki_logo.png)
+![](../assets/img/wiki_logo.png = x50)
 
 ## Table of Contents
 
