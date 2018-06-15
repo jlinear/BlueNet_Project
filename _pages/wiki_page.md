@@ -3,7 +3,7 @@ layout: page
 title:  "Wiki"
 ---
 
-[TOC]
+#Table of Contents
 [Proposal](#introduction)
 
 ## Protocol Proposal <a name="introduction"></a>
