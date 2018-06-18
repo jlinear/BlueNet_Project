@@ -47,13 +47,13 @@ navigation:
   url: ./
   internal: true
 - text: Wiki
-  url: wiki_page/
+  url: wiki/
   internal: true
 - text: Demo
-  url: demo_page/
+  url: demo/
   internal: true
 - text: About
-  url: about_page
+  url: about/
   internal: true
 
 # Repo list
