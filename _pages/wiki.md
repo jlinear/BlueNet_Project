@@ -8,7 +8,27 @@ title:  "Wiki"
 </p>
 <!-- ![](../assets/img/wiki_logo.png) -->
 
-[Proposal](#introduction)
+
+[Introducing BlueNet](#intro)
+[Architecture](#archi)
+[Stack Protocol](#stack)
+[Android/Java App Development](#andr)
+[Reference](#ref)
+
+## Introducing BlueNet <a name="intro"></a>
+
+## Architecture <a name="archi"></a>
+
+## Stack Protocol <a name="stack"></a>
+
+## Android/Java App Development <a name="andr"></a>
+
+## Reference <a name="ref"></a>
+
+
+
+
+
 
 ## Introduction
 
