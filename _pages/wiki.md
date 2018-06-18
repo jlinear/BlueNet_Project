@@ -19,29 +19,16 @@ title:  "Wiki"
 
 [Reference](#ref)
 
+
 ## Introducing BlueNet <a name="intro"></a>
 
 ## Architecture <a name="archi"></a>
 
 ## Stack Protocol <a name="stack"></a>
 
-## Android/Java App Development <a name="andr"></a>
-
-## Reference <a name="ref"></a>
-
-
-
-
-
-
-## Introduction
-
-
-## Protocol Proposal <a name="introduction"></a>
-
 **0.0 Overview**
 
-The purpose of this document is to describe the protocol built on top of BLE to construct a mesh network. The mesh network is meant to operate in an opportunistic fashion with highly mobile nodes. Moreover, this addition to the network stack will be implemented in Android in application space.
+This section describes the protocol built on top of BLE to construct a mesh network. The mesh network is meant to operate in an opportunistic fashion with highly mobile nodes. Moreover, this addition to the network stack will be implemented in Android in application space.
 
 **1.0 Functions of the Network Stack**
  - Device discovery
@@ -152,8 +139,8 @@ All devices scan and advertise at the same time; i.e., perform both the role of 
 - There are a number of different approaches to disseminating location information throughout the network beyond flooding. Here are some of the following options inspired by current literature:
 
 - Location updates are sent or forwarded based on the error estimate where the error is driven by:
-	- the elapsed time since the last location update
-	- the historical changes in the node's location
+    - the elapsed time since the last location update
+    - the historical changes in the node's location
 
 - Location updates are sent or forwarded based on the distance that a node has traveled from its previous location. This can be combined with the error estimation.
 
@@ -176,9 +163,9 @@ All devices scan and advertise at the same time; i.e., perform both the role of 
 
 - Node of interest propagation:
 Given that the location update frequency is adjusted based on distance (or hop count) then the following addition ought to be considered:
-	- When a node serves as a forwarder for a message sent from node A to B then the location update frequency (in the direction of A?) for node B is temporarily increased so that A can find out B's location more precisely.
-	- The assumption is that interest in communication implies interest in location
-	- Additionally, if a location update message is ever sent with a destination ID other than the broadcast ID (A addresses B, specifically) then location update rate from B will be temporarily increased (by decreasing thresholds).
+    - When a node serves as a forwarder for a message sent from node A to B then the location update frequency (in the direction of A?) for node B is temporarily increased so that A can find out B's location more precisely.
+    - The assumption is that interest in communication implies interest in location
+    - Additionally, if a location update message is ever sent with a destination ID other than the broadcast ID (A addresses B, specifically) then location update rate from B will be temporarily increased (by decreasing thresholds).
 
 
 **1.6 Message Dissemination / Routing**
@@ -189,23 +176,23 @@ Given that the location update frequency is adjusted based on distance (or hop c
     - In an ad-hoc network, one of the go-to methods of routing is on-demand routing in which a route request is broadcast and a route is unicast back. This has the unfortunate side effect of taking longer to send a message, and this method is not immune to disconnections in the network. Further, location information is an assumed aspect of BlueNet (modifications to this discussed later). The core of our routing protocol is greedy geographic routing, but since we know this is not perfect either, we propose the following adaptations based on the literature:
 
     - Geographic flooding (k-path geographic routing):
-	    - the k best paths toward the destination receive the message for forwarding
-	    - assumes push-based sending
-	    - Preferred method of routing for low traffic network. Scaled from 8 (max number of connections) down to 1 based on network conditions.
+        - the k best paths toward the destination receive the message for forwarding
+        - assumes push-based sending
+        - Preferred method of routing for low traffic network. Scaled from 8 (max number of connections) down to 1 based on network conditions.
 
     - When traffic volume increases we will switch to pull-based communication and can consider additional node properties in addition to location to help with forwarding decisions:
-    	- forwarding vector (traffic direction (x,y) and volume z)
-    	- direction of movement
-    	- below require additional control messages such as sharing neighbor/GATT connection tables:
-    	- (node centrality)
-    	- (number of node connections)
-    	- (node recent connections)
-    	
+        - forwarding vector (traffic direction (x,y) and volume z)
+        - direction of movement
+        - below require additional control messages such as sharing neighbor/GATT connection tables:
+        - (node centrality)
+        - (number of node connections)
+        - (node recent connections)
+        
     - Geographic Routing Failure:
 It is possible for geographic routing to fail. This could be caused by erroneous (or very stale) location updates, a complete lack of localization (GPS turned off?), or the destination node cannot be reached. In this case we can fall back to a couple of methods:
-	    - On demand routing
-	    - constrained flooding (in all directions but no repeated broadcasts and TTL is considered)
-	    - store, carry, and forward: the node that is unable to forward a message anymore caches it to pass along later until the buffer is full or a timeout has expired.
+        - On demand routing
+        - constrained flooding (in all directions but no repeated broadcasts and TTL is considered)
+        - store, carry, and forward: the node that is unable to forward a message anymore caches it to pass along later until the buffer is full or a timeout has expired.
 
 
 **1.7 Addressing**
@@ -223,8 +210,8 @@ It is possible for geographic routing to fail. This could be caused by erroneous
     - There is always a special Broadcast or All group that contains all nodes running BlueNet (ID = 0000)
     
     - Named groups allow nodes in a network to be associated and addressed concisely no matter their location. This does, however, create an issue for a routing mechanism based on geography. To address this we make use of the group feedback message type. This message is used to indicate to another node that a group member is in a particular direction. This message can be sent at two points in the communication process: 
-	    - When a node enters a named group it sends a message to all of its neighbors indicating that it is a member of the given group.
-    	- When a node receives a message destined for the group to which the current node subscribes and the sending node has not sent anything to the group since this node joined or for T seconds.
+        - When a node enters a named group it sends a message to all of its neighbors indicating that it is a member of the given group.
+        - When a node receives a message destined for the group to which the current node subscribes and the sending node has not sent anything to the group since this node joined or for T seconds.
 
     - The feedback message only contains the group ID (see part XXX) and is used internally to generate a 2D vector in the direction of the node sending the feedback of length 1. When multiple feedback messages are received for the same group then vector addition is used to aggregate all the directions of the group.
 
@@ -240,7 +227,10 @@ It is possible for geographic routing to fail. This could be caused by erroneous
     - the establishment process can only be initiated by a scanner, but the data flow and the operation of ending connection can be done form both side.
  - when a new payload is loaded and broadcast, the BLE mac address is actually changed (out of security consideration by BLE designer), so the only identifier for a specific device is the userid. So if a device plays as an mediator and changed its payload, the source device may take longer time to find this mediator and connect the first hop.
 
-**Refs**
+## Android/Java App Development <a name="andr"></a>
+
+## Reference <a name="ref"></a>
+
 
     [1]: Cho, Keuchul, Woojin Park, Moonki Hong, Gisu Park, Wooseong Cho, Jihoon Seo, and Kijun Han. 2014. “Analysis of Latency Performance of Bluetooth Low Energy (BLE) Networks.” Sensors (Basel, Switzerland) 15 (1): 59–78. https://doi.org/10.3390/s150100059.
     [2]: https://stackoverflow.com/questions/37151579/schemes-for-streaming-data-with-ble-gatt-characteristics
@@ -248,6 +238,21 @@ It is possible for geographic routing to fail. This could be caused by erroneous
     [4]: https://stackoverflow.com/questions/24135682/android-sending-data-20-bytes-by-ble
     [5]: https://stackoverflow.com/questions/38640908/android-ble-how-is-large-characteristic-value-read-in-chunks-using-an-offset
     [6]: https://stackoverflow.com/questions/31030718/handling-indications-instead-of-notifications-in-android-ble
+
+
+
+
+
+
+## Introduction
+
+
+## Protocol Proposal <a name="introduction"></a>
+
+
+
+**Refs**
+
 
 
   [1]: https://stackoverflow.com/questions/34346589/android-ble-advertising-interval-change
