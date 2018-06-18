@@ -24,6 +24,13 @@ title:  "Wiki"
 
 ## Architecture <a name="archi"></a>
 
+The architecture of the BlueNet stack is shown as below.
+
+<p align="center">
+<img src="../assets/img/wiki_logo.png" alt="bluenet" height="400px"/>
+</p>
+
+
 ## Stack Protocol <a name="stack"></a>
 
 **0.0 Overview**
@@ -228,6 +235,8 @@ It is possible for geographic routing to fail. This could be caused by erroneous
  - when a new payload is loaded and broadcast, the BLE mac address is actually changed (out of security consideration by BLE designer), so the only identifier for a specific device is the userid. So if a device plays as an mediator and changed its payload, the source device may take longer time to find this mediator and connect the first hop.
 
 ## Android/Java App Development <a name="andr"></a>
+
+[TO BE FILLED SOON!]
 
 ## Reference <a name="ref"></a>
 
