@@ -10,9 +10,13 @@ title:  "Wiki"
 
 
 [Introducing BlueNet](#intro)
+
 [Architecture](#archi)
+
 [Stack Protocol](#stack)
+
 [Android/Java App Development](#andr)
+
 [Reference](#ref)
 
 ## Introducing BlueNet <a name="intro"></a>
