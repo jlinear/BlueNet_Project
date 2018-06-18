@@ -244,15 +244,4 @@ It is possible for geographic routing to fail. This could be caused by erroneous
 
 
 
-## Introduction
-
-
-## Protocol Proposal <a name="introduction"></a>
-
-
-
-**Refs**
-
-
-
   [1]: https://stackoverflow.com/questions/34346589/android-ble-advertising-interval-change
