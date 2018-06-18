@@ -8,9 +8,10 @@ title:  "Wiki"
 </p>
 <!-- ![](../assets/img/wiki_logo.png) -->
 
-## Table of Contents
-
 [Proposal](#introduction)
+
+## Introduction
+
 
 ## Protocol Proposal <a name="introduction"></a>
 
