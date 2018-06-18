@@ -22,12 +22,24 @@ title:  "Wiki"
 
 ## Introducing BlueNet <a name="intro"></a>
 
+BlueNet is the stack protocol designed and implemented on top of Bluetooth&reg Low Energy (BLE) stack. While BLE was originally designed as a single-hop networking solution, its widespread use can help fuel adoption of BLE as basis for ad-hoc established networks. However, BLE is not readily able to form such networks and, therefore, BlueNet will provide the mechanisms and protocol enhancements needed to turn a BLE-equipped smartphone into an ad-hoc network capable device.
+
+**Developing Environment**
+
+The current version of BlueNet is developed using java, targeting for Android applications (API level 23 and higher). 
+
+**Core Technology**
+
+BlueNet solely relies on the BLE technology to provide infrastructure-less communications. Connections are established based on BLE Generic Attribute Profiles (GATT), and data is transmitted in the form of GATT characteristics encapsulated by GATT services. Please see [Bluetooth core specifications][2] for more details.
+
+
+
 ## Architecture <a name="archi"></a>
 
 The architecture of the BlueNet stack is shown as below.
 
 <p align="center">
-<img src="../assets/img/archi.png" alt="bluenet" height="400px"/>
+<img src="../assets/img/archi.png" alt="archi" height="400px"/>
 </p>
 
 
@@ -254,3 +266,4 @@ It is possible for geographic routing to fail. This could be caused by erroneous
 
 
   [1]: https://stackoverflow.com/questions/34346589/android-ble-advertising-interval-change
+  [2]: https://www.bluetooth.com/specifications/bluetooth-core-specification
