@@ -27,7 +27,7 @@ title:  "Wiki"
 The architecture of the BlueNet stack is shown as below.
 
 <p align="center">
-<img src="../assets/img/wiki_logo.png" alt="bluenet" height="400px"/>
+<img src="../assets/img/archi.png" alt="bluenet" height="400px"/>
 </p>
 
 
