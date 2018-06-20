@@ -23,4 +23,4 @@ The Android installing package can be downloaded [here][apk].
 
 
 
-[apk]: ../assets/dispatch.apk
+[apk]: https://github.com/jlinear/DispatchApp/releases/download/v1.0-alpha/app-dispatch.apk
