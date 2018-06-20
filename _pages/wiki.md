@@ -61,20 +61,22 @@ This section describes the protocol built on top of BLE to construct a mesh netw
 
 The advertisement packet is structured thusly:
 ```
-======================================================
+=============================================================
 | src_id | dest_id | msg_id | TTL | HP  | U/A | len | <msg> |
-------------------------------------------------------
-| 4 B    | 4 B     | 1 B    | 3b  | 1b  | 4b  | 1B  | >=0 B|
-======================================================
+-------------------------------------------------------------
+| 4 B    | 4 B     | 1 B    | 3b  | 1b  | 4b  | 1B  | 0-9 B |
+=============================================================
 ```
 
-`src_id` and `dest_id` are 'unique' 4 byte alphanumeric strings (barring birthday problem issues). The same type of ID is used for groups.
+`src_id` and `dest_id` are 'unique' 4 byte alphanumeric strings called BlueNet IDs. The same type of ID is used for groups.
 
 `msg_id` is a single byte that is incremented by a sender for each message sent (including all control messages).
 
-`TTL` is simply a 3 bit number that represents the number of hops that the message can still be forwarded.
+`TTL` is a 3 bit number that represents the number of hops that the message can still be forwarded.
 
 `HP` is the high priority bit used to designate more important messages.
+
+`U/A` is a nybble of unassigned bits
 
 `len` is the length of the <msg> field
 
@@ -92,13 +94,31 @@ The message type will be reflected in the GATT service UUID field. The types are
     - <msg> is the group table (<group_id> <group_type> <group props> <group_id> ...)
  - `0x186C - group_query`:  Query a device for its group table (response is group update)
     - <msg> is the timestamp
- - `0x186D - group_feedback`: Provide feedback about named group membership
-    - <msg> is the group ID
 
+**1.2 Device Discovery**
+
+All devices scan and advertise at the same time; i.e., perform both the role of Central and Peripheral at the same. It has been shown in [1] that long scan intervals and short advertisement intervals can increase the discovery probability (advertisements and scan intervals coincide) and therefore decrease the discovery latency.
+
+**1.2a Device Discovery--Server**
+
+A GATT server on the devices advertises the BlueNet service through BLE advertisements without any payload. The service contains a characteristic for each message type as well as a pull characteristic. The message type specific characteristics are used to notify other devices about a new message that is available to be read from the pull characteristic of the type indicated by the characteristic. After a client connects they will need to register with the server for these notifications.
+
+- **1.2a.1 Data Structures**
+
+    - Table of registered devices
+
+**1.2b Device Discovery--Client**
+
+A GATT client on the devices scans for advertisements for the BlueNet service and connects to the GATT server if not already connected. 
+
+- **1.2a.1 Data Structures**
+
+    - Table of device connections: used for managing the GATT connection with each server
+    - Table of 
 
 **1.2a Device Discovery / Intent to send msg**
 
-All devices scan and advertise at the same time; i.e., perform both the role of Central and Peripheral at the same. It has been shown in [1] that long scan intervals and short advertisement intervals can increase the discovery probability (advertisements and scan intervals coincide) and therefore decrease the discovery latency. 
+ 
 
 - **1.2a.1 Data Structures**
 
