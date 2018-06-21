@@ -32,7 +32,7 @@ title:  "Wiki"
 
 ## Introducing BlueNet <a name="intro"></a>
 
-BlueNet is the stack protocol designed and implemented on top of Bluetooth&reg Low Energy (BLE) stack. While BLE was originally designed as a single-hop networking solution, its widespread use can help fuel adoption of BLE as basis for ad-hoc established networks. However, BLE is not readily able to form such networks and, therefore, BlueNet will provide the mechanisms and protocol enhancements needed to turn a BLE-equipped smartphone into an ad-hoc network capable device.
+BlueNet is the stack protocol designed and implemented on top of Bluetooth Low Energy (BLE) stack. While BLE was originally designed as a single-hop networking solution, its widespread use can help fuel adoption of BLE as basis for ad-hoc established networks. However, BLE is not readily able to form such networks and, therefore, BlueNet will provide the mechanisms and protocol enhancements needed to turn a BLE-equipped smartphone into an ad-hoc network capable device.
 
 **Developing Environment**
 
