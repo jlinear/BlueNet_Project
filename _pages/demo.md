@@ -18,10 +18,13 @@ The Android installing package can be downloaded [here][apk].
 
 ## Demo:
 
-[The following video is the demo for single hop chat, full demo video will be released soon.]
+**Sing-hop Chat:**
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/zTYGq3GSmO0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
+**Group Broadcast**
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/UpfY0ZQgHjo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></ifram
 
 
 [apk]: https://github.com/jlinear/DispatchApp/releases/download/v1.0-alpha/app-dispatch.apk
