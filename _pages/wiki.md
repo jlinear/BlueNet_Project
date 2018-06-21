@@ -49,7 +49,7 @@ BlueNet solely relies on the BLE technology to provide infrastructure-less commu
 The architecture of the BlueNet stack is shown as below.
 
 <p align="center">
-<img src="../assets/img/architecture.png" alt="architecture" height=300px/>
+<img src="../assets/img/architecture.png" alt="architecture" height="300px"/>
 </p>
 
 
