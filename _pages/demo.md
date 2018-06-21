@@ -18,8 +18,9 @@ The Android installing package can be downloaded [here][apk].
 
 ## Demo Video:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/_D0ZQPqeJkk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+[The following video is the demo for single hop chat, full demo video will be released soon.]
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/zTYGq3GSmO0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
 
