@@ -127,100 +127,74 @@ Except for Small Messages, all message types have their header bytes and payload
 
 With Small Messages, the entire payload fits within the 20 bytes allotted to a BLE packet (without renegotiating the MTU), thus the payload is sent along with the header in the notification.
 
+All outgoing messages receive a message ID which is a single byte number to identify the message. 
+
+- **1.4.1 Data Structures**
+    - Outgoing message queue: contains all messages to be sent
+
 **1.5 Receive Message**
+
+When a GATT client receives a notification, the contents of the characteristic are parsed into a packet object. The characteristic UUID is used to set the message type, and the one-hop neighbor can be determined from the Bluetooth to BlueNet address table. Messages are checked to see if they are relatively unique (based on the source ID and the message ID) and passed on to other layers of the network stack which manage locations, groups, and routing.
+
+When the payload is sent along with the notification then no further work is needed. However, when there is no
+payload, and the message length is greater than zero, a method to read from the Pull characteristic (should the data be desired by this device) is passed along with the packet object.
 
 - **1.5.1 Data Structures**
     - Buffer of recent messages: Tracks (src_id, msg_id) pairs that can be used to identify repeated messages. Only need to track a finite number of entries.
-    
-- **1.5.2 Small Message/Group Query/Group Feedback -- DEPRECATED?**
-    - Read from advertisement (or characteristic) and enqueue message in send queue if node_id does not match the dest_id. Hand the message in the appropriate module, drop it, or forward it. Add (msg_src_id, msg_id) to the ring buffer.
 
-- **1.5.3 Other Messages**
-    - PUSH: the message is received and handled by the appropriate module, dropped, or forwarded.
-    - PULL: the header is evaluated to see if it is relevant to the current node. If it is, then the payload is read and we proceed much like in PUSH.
-    - Add (msg_src_id, msg_id) to the buffer.
 
-**Location Dissemination**
-- There are a number of different approaches to disseminating location information throughout the network beyond flooding. Here are some of the following options inspired by current literature:
+**1.6 Location Dissemination**
+There are a number of different approaches to disseminating location information throughout the network beyond flooding. Here are some of the following options inspired by current literature:
 
-- Location updates are sent or forwarded based on the error estimate where the error is driven by:
+Location updates are sent or forwarded based on the error estimate where the error is driven by:
     - the elapsed time since the last location update
     - the historical changes in the node's location
 
-- Location updates are sent or forwarded based on the distance that a node has traveled from its previous location. This can be combined with the error estimation.
+Location updates are sent or forwarded based on the distance that a node has traveled from its previous location. This can be combined with the error estimation.
 
-- Location updates are sent or forwarded based on the velocity of the node.
+Location updates are sent or forwarded based on the velocity of the node.
 
-- The above can be combined with hop or distance thresholds to decrease the frequency at which more distant nodes get updated about a particular node's location.
-- The implementation that we will be following is:
+The above can be combined with hop or distance thresholds to decrease the frequency at which more distant nodes get updated about a particular node's location.
+
+The implementation that we will be following is:
     - Establish four zones (me, near, medium, far) based on radius from the current node each with their own difference threshold (D).
-        - me: current node (alt. 0 hops)
-        - near: 15 m (1 hop)
-        - medium: 50 m (2 hops)
-        - far: > 100 m (>3 hops)
+        - me: 0 hops
+        - near: 1 hop
+        - medium: 2 hops
+        - far: >3 hops
     - A node tracks the last five locations for each node it has heard from (including itself).
-    - The decision on whether to (re)broadcast is based on the root mean squared (RMS) distance of the last five location readings (as a way to capture the tendency of GPS measurements to wobble near a particular location if standing still and what a deviation from this should look like). If no recent locations are available then the difference between the current location and the last location are used (with an initialized location of 0,0 which could be problematic if we are operating in the Gulf of Guinea)
+    - The decision on whether to (re)broadcast is based on the root mean squared (RMS) / mean squared distance of the last five location readings (as a way to capture the tendency of GPS measurements to wobble near a particular location if standing still and what a deviation from this should look like). If no recent locations are available then the difference between the current location and the last location are used (with an initialized location of (0,0) which could be problematic if we are operating in the Gulf of Guinea)
     - The following thresholds will be used for determining when to (re)broadcast, but require further evaluation:
         - zone 'me' (the current node): D > 1m
         - zone 'near': D > 3m
         - zone 'medium': D > 7m
         - zone 'far': D > 13m
 
-- Node of interest propagation:
-Given that the location update frequency is adjusted based on distance (or hop count) then the following addition ought to be considered:
-    - When a node serves as a forwarder for a message sent from node A to B then the location update frequency (in the direction of A?) for node B is temporarily increased so that A can find out B's location more precisely.
-    - The assumption is that interest in communication implies interest in location
-    - Additionally, if a location update message is ever sent with a destination ID other than the broadcast ID (A addresses B, specifically) then location update rate from B will be temporarily increased (by decreasing thresholds).
+    - Currently, an error is added to the RMS/ mean squared distance calculation such that .5m is added each second past the most recently shared location update.
 
+    - Due to the limitation of GATT packets to 20 bytes, the latitude and longitude are both floats rather than doubles.
 
-**1.6 Message Dissemination / Routing**
-- **1.6.1 Data Structures**
+**1.7 Message Dissemination / Routing**
+Messages are currently flooded in the network with only the message uniqueness test and TTL to contain the flood.
 
-    - Buffer of recent messages: Tracks (src_id, msg_id) pairs that can be used to identify repeated messages. Only need to track a finite number of entries. (same as one from 1.5.1)
-- **1.6.2 Description**
-    - In an ad-hoc network, one of the go-to methods of routing is on-demand routing in which a route request is broadcast and a route is unicast back. This has the unfortunate side effect of taking longer to send a message, and this method is not immune to disconnections in the network. Further, location information is an assumed aspect of BlueNet (modifications to this discussed later). The core of our routing protocol is greedy geographic routing, but since we know this is not perfect either, we propose the following adaptations based on the literature:
+**1.8 Addressing**
+- All nodes and groups have a unique 4 byte id
+- Note: Groups have not been thoroughly tested
+- A group is a set of nodes (possibly empty), identified by a unique id that is either a Named Group or Geographic Group
+    - A *Named Group* is simply a labelling mechanism to which a device can subscribe (a device could be part of group 'Blue' for instance)
+    - A *Geographic Group* is a group that is associated with a circle (specified in meters) around a pair of coordinates.
+- A node can belong to any number of groups
+- Groups can be addressed just like a node
+    - forwarding to a group only differs in that a message is forwarded as long as TTL > 0 rather than ending when an appropriate recipient is found.
+- Groups are created by anyone
+- Lists of available groups can be shared and be queried for.
+- Geographic groups are entered and exited automatically (as long as the group is known to the node, of course).
+- There is always a special Broadcast or All group that contains all nodes running BlueNet (ID = 0000)
 
-    - Geographic flooding (k-path geographic routing):
-        - the k best paths toward the destination receive the message for forwarding
-        - assumes push-based sending
-        - Preferred method of routing for low traffic network. Scaled from 8 (max number of connections) down to 1 based on network conditions.
+- Named groups allow nodes in a network to be associated and addressed concisely no matter their location. This does, however, create an issue for a routing mechanism based on geography. 
 
-    - When traffic volume increases we will switch to pull-based communication and can consider additional node properties in addition to location to help with forwarding decisions:
-        - forwarding vector (traffic direction (x,y) and volume z)
-        - direction of movement
-        - below require additional control messages such as sharing neighbor/GATT connection tables:
-        - (node centrality)
-        - (number of node connections)
-        - (node recent connections)
-        
-    - Geographic Routing Failure:
-It is possible for geographic routing to fail. This could be caused by erroneous (or very stale) location updates, a complete lack of localization (GPS turned off?), or the destination node cannot be reached. In this case we can fall back to a couple of methods:
-        - On demand routing
-        - constrained flooding (in all directions but no repeated broadcasts and TTL is considered)
-        - store, carry, and forward: the node that is unable to forward a message anymore caches it to pass along later until the buffer is full or a timeout has expired.
+- A 16-bit checksum for the table of group IDs is added to the location updates to help disseminate the set of groups.
 
-
-**1.7 Addressing**
-- **1.7.1 Description**
-    - All nodes and groups have a unique 4 byte id
-    - A group is a set of nodes (possibly empty), identified by a unique id that is either a Named Group or Geographic Group
-        - A *Named Group* is simply a labelling mechanism to which a device can subscribe (a could be part of group 'Blue' for instance)
-        - A *Geographic Group* is a group that is associated with a circle (specified in meters) around a set of coordinates.
-    - A node can belong to an number of groups
-    - Groups can be addressed just like a node
-        - forwarding to a group only differs in that a message is forwarded as long as TTL > 0 rather than ending when an appropriate recipient is found.
-    - Groups are created by anyone
-    - Lists of available groups can be shared and be queried for.
-    - Geographic groups are entered and exited automatically (as long as the group is known to the node, of course).
-    - There is always a special Broadcast or All group that contains all nodes running BlueNet (ID = 0000)
-    
-    - Named groups allow nodes in a network to be associated and addressed concisely no matter their location. This does, however, create an issue for a routing mechanism based on geography. To address this we make use of the group feedback message type. This message is used to indicate to another node that a group member is in a particular direction. This message can be sent at two points in the communication process: 
-        - When a node enters a named group it sends a message to all of its neighbors indicating that it is a member of the given group.
-        - When a node receives a message destined for the group to which the current node subscribes and the sending node has not sent anything to the group since this node joined or for T seconds.
-
-    - The feedback message only contains the group ID (see part XXX) and is used internally to generate a 2D vector in the direction of the node sending the feedback of length 1. When multiple feedback messages are received for the same group then vector addition is used to aggregate all the directions of the group.
-
-    - The group location can then be recorded as the point on a circle 2R from the current node that coincides with the group direction vector. If the magnitude of the vector is not beyond a certain threshold then the message will be sent in all directions; otherwise, the location attained from the vector is treated as if it were the location of a single node and routing proceeds like normal.
 
 **2.0 Further Investigation**
 
