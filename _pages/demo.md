@@ -1,22 +1,22 @@
 ---
 layout: page
-title:  "Demo: Dispatch App"
+title:  "Prototype: Dispatch App"
 ---
 
 ## APK: 
 The Android installing package can be downloaded [here][apk].
 
-## Screenshots:
+<!-- ## Screenshots:
 <p align="center">
 <img src="../assets/img/.png" alt="demo_screenshots" height="300px"/>
-</p>
+</p> -->
 
 ## Functionality:
 - Interactive Map View
 - BlueChat
 - SOS Signal Dissemination
 
-## Demo Video:
+## Demo:
 
 [The following video is the demo for single hop chat, full demo video will be released soon.]
 
