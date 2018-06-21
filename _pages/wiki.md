@@ -14,7 +14,16 @@ title:  "Wiki"
 [Architecture](#archi)
 
 [Stack Protocol](#stack)
-    - [Overview](#overview)
+
+- [Overview](#overview)
+- [Functions](#function)
+- [Messages](#msg_type)
+- [Discovery](#discovery)
+- [Link Maintenance](#link)
+- [Sending](#send)
+- [Receiving](#receive)
+- [Location Sharing](#location)
+- [Addressing](#addressing)
 
 [Android/Java App Development](#andr)
 
@@ -50,15 +59,16 @@ The architecture of the BlueNet stack is shown as below.
 
 This section describes the protocol built on top of BLE to construct a mesh network. The mesh network is meant to operate in an opportunistic fashion with highly mobile nodes. Moreover, this addition to the network stack will be implemented in Android in application space.
 
-**1.0 Functions of the Network Stack**
- - Device discovery
- - Link maintenance
- - Addressing
- - Send Message
- - Receive Message
- - Message routing
+**1.0 Functions of the Network Stack** <a name="function"></a>
 
-**1.1 Message Types and Advertisement Structure**
+- Device discovery
+- Link maintenance
+- Addressing
+- Send Message
+- Receive Message
+- Message routing
+
+**1.1 Message Types and Advertisement Structure** <a name="msg_types"></a>
 
 The advertisement packet is structured thusly:
 ```
@@ -96,7 +106,7 @@ The message type will be reflected in the GATT service UUID field. The types are
  - `0x186C - group_query`:  Query a device for its group table (response is group update)
     - <msg> is the timestamp
 
-**1.2 Device Discovery**
+**1.2 Device Discovery** <a name="discovery"></a>
 
 All devices scan and advertise at the same time; i.e., perform both the role of Central and Peripheral at the same. It has been shown in [1] that long scan intervals and short advertisement intervals can increase the discovery probability (advertisements and scan intervals coincide) and therefore decrease the discovery latency.
 
@@ -117,11 +127,11 @@ A GATT client on the devices scans for advertisements for the BlueNet service an
     - Table of device connections: used for managing the GATT connection with each server
     - Table of Bluetooth and BlueNet addresses: helps with tracking topology information and directing communication
 
-**1.3 Link Maintenance**
+**1.3 Link Maintenance** <a name="link"></a>
 
 Since GATT connections will disconnect when the connection becomes stale (no data transferred between two devices for 20 seconds on Android), location updates are sent frequently enough to prevent disconnections due to timeouts.
 
-**1.4 Send Message**
+**1.4 Send Message** <a name="send"></a>
 
 Except for Small Messages, all message types have their header bytes and payload bytes place into separate characteristics. The header goes into the characteristic corresponding to that message's type, and the payload goes into a Pull characteristic. If a particular one-hop neighbor is indicated by upper layers of the network stack, then only that neighbor receives the notification for the changed (header) characteristic; otherwise, all neighbors are notified of the change. Once a receiving device decides it wants the message, it will read the data out of the Pull characteristic. If _t_ milliseconds have elapsed without any read attempts, then a new message can be sent (and can replace the contents of the Pull characteristic). 
 
@@ -132,7 +142,7 @@ All outgoing messages receive a message ID which is a single byte number to iden
 - **1.4.1 Data Structures**
     - Outgoing message queue: contains all messages to be sent
 
-**1.5 Receive Message**
+**1.5 Receive Message** <a name="receive"></a>
 
 When a GATT client receives a notification, the contents of the characteristic are parsed into a packet object. The characteristic UUID is used to set the message type, and the one-hop neighbor can be determined from the Bluetooth to BlueNet address table. Messages are checked to see if they are relatively unique (based on the source ID and the message ID) and passed on to other layers of the network stack which manage locations, groups, and routing.
 
@@ -143,14 +153,14 @@ payload, and the message length is greater than zero, a method to read from the 
     - Buffer of recent messages: Tracks (src_id, msg_id) pairs that can be used to identify repeated messages. Only need to track a finite number of entries.
 
 
-**1.6 Location Dissemination**
+**1.6 Location Dissemination** <a name="location"></a>
 
 There are a number of different approaches to disseminating location information throughout the network beyond flooding. Here are some of the following options inspired by current literature:
 
 Location updates are sent or forwarded based on the error estimate where the error is driven by:
 
-    - the elapsed time since the last location update
-    - the historical changes in the node's location
+- the elapsed time since the last location update
+- the historical changes in the node's location
 
 Location updates are sent or forwarded based on the distance that a node has traveled from its previous location. This can be combined with the error estimation.
 
@@ -160,29 +170,26 @@ The above can be combined with hop or distance thresholds to decrease the freque
 
 The implementation that we will be following is:
 
-    - Establish four zones (me, near, medium, far) based on radius from the current node each with their own difference threshold (D).
+- Establish four zones (me, near, medium, far) based on radius from the current node each with their own difference threshold (D).
+    - me: 0 hops
+    - near: 1 hop
+    - medium: 2 hops
+    - far: >3 hops
+- A node tracks the last five locations for each node it has heard from (including itself).
+- The decision on whether to (re)broadcast is based on the root mean squared (RMS) / mean squared distance of the last five location readings (as a way to capture the tendency of GPS measurements to wobble near a particular location if standing still and what a deviation from this should look like). If no recent locations are available then the difference between the current location and the last location are used (with an initialized location of (0,0) which could be problematic if we are operating in the Gulf of Guinea)
+- The following thresholds will be used for determining when to (re)broadcast, but require further evaluation:
+     - zone 'me' (the current node): D > 1m
+     - zone 'near': D > 3m
+     - zone 'medium': D > 7m
+     - zone 'far': D > 13m
+- Currently, an error is added to the RMS/ mean squared distance calculation such that .5m is added each second past the most recently shared location update.
+- Due to the limitation of GATT packets to 20 bytes, the latitude and longitude are both floats rather than doubles.
 
-        - me: 0 hops
-        - near: 1 hop
-        - medium: 2 hops
-        - far: >3 hops
-
-    - A node tracks the last five locations for each node it has heard from (including itself).
-    - The decision on whether to (re)broadcast is based on the root mean squared (RMS) / mean squared distance of the last five location readings (as a way to capture the tendency of GPS measurements to wobble near a particular location if standing still and what a deviation from this should look like). If no recent locations are available then the difference between the current location and the last location are used (with an initialized location of (0,0) which could be problematic if we are operating in the Gulf of Guinea)
-    - The following thresholds will be used for determining when to (re)broadcast, but require further evaluation:
-        - zone 'me' (the current node): D > 1m
-        - zone 'near': D > 3m
-        - zone 'medium': D > 7m
-        - zone 'far': D > 13m
-
-    - Currently, an error is added to the RMS/ mean squared distance calculation such that .5m is added each second past the most recently shared location update.
-
-    - Due to the limitation of GATT packets to 20 bytes, the latitude and longitude are both floats rather than doubles.
-
-**1.7 Message Dissemination / Routing**
+**1.7 Message Dissemination / Routing** <a name="routing"></a>
 Messages are currently flooded in the network with only the message uniqueness test and TTL to contain the flood.
 
-**1.8 Addressing**
+**1.8 Addressing** <a name="addressing"></a>
+
 - All nodes and groups have a unique 4 byte id
 - Note: Groups have not been thoroughly tested
 - A group is a set of nodes (possibly empty), identified by a unique id that is either a Named Group or Geographic Group
@@ -200,16 +207,6 @@ Messages are currently flooded in the network with only the message uniqueness t
 
 - A 16-bit checksum for the table of group IDs is added to the location updates to help disseminate the set of groups.
 
-
-**2.0 Further Investigation**
-
- - How much can the scanning and advertising intervals be tuned in Android? What is optimal?
-    - Developers cannot control over the exact millisecond frequency, but can experiment with different settings, such as (ADVERTISE_MODE_LOW_LATENCY, or ADVERTISE_MODE_LOW_POWER). Refer to [here][1]
- - How many GATT connections can be maintained simultaneously?
-    - 7 or 8 max.
- - Can GATT connections be maintained bidirectionally?
-    - the establishment process can only be initiated by a scanner, but the data flow and the operation of ending connection can be done form both side.
- - when a new payload is loaded and broadcast, the BLE mac address is actually changed (out of security consideration by BLE designer), so the only identifier for a specific device is the userid. So if a device plays as an mediator and changed its payload, the source device may take longer time to find this mediator and connect the first hop.
 
 ## Android/Java App Development <a name="andr"></a>
 
