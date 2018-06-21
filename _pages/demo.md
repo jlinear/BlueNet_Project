@@ -23,7 +23,7 @@ The Android installing package can be downloaded [here][apk].
 
 **Basic User Interface**
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/b702AGEXOj8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/i3MHNxwUe0A" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 **Sing-hop Chat:**
 
