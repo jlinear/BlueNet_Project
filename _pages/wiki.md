@@ -14,6 +14,7 @@ title:  "Wiki"
 [Architecture](#archi)
 
 [Stack Protocol](#stack)
+    - [Overview](#overview)
 
 [Android/Java App Development](#andr)
 
@@ -45,7 +46,7 @@ The architecture of the BlueNet stack is shown as below.
 
 ## Stack Protocol <a name="stack"></a>
 
-**0.0 Overview**
+**0.0 Overview** <a name="overview"></a>
 
 This section describes the protocol built on top of BLE to construct a mesh network. The mesh network is meant to operate in an opportunistic fashion with highly mobile nodes. Moreover, this addition to the network stack will be implemented in Android in application space.
 
@@ -109,57 +110,22 @@ A GATT server on the devices advertises the BlueNet service through BLE advertis
 
 **1.2b Device Discovery--Client**
 
-A GATT client on the devices scans for advertisements for the BlueNet service and connects to the GATT server if not already connected. 
+A GATT client on the devices scans for advertisements for the BlueNet service and connects to the GATT server if not already connected. The client will register for notifications for each of the message type characteristics.
 
 - **1.2a.1 Data Structures**
 
     - Table of device connections: used for managing the GATT connection with each server
-    - Table of 
-
-**1.2a Device Discovery / Intent to send msg**
-
- 
-
-- **1.2a.1 Data Structures**
-
-    - ID-Location lookup table: track most recent locations of each ID. Need to maintain timestamps so that staleness of location is available.
-     - Group table: table of group ids that are known as well as those to which the node subscribes. Each entry also includes a name and properties associated with the group.
-
-- **1.2a.2 Description**
-
-    - All devices advertise that they are connectable so that all further communication can occur over GATT using the <msg_type> as an identifier for the GATT service.
-    - A receiver will register for notifications from the message header characteristic
-    - Once a connection is established it is maintained until it is deemed stale or needs to be replaced.
-    - The receiver end has a filter to identify certain types of advertisement packets and respond accordingly. 
-
+    - Table of Bluetooth and BlueNet addresses: helps with tracking topology information and directing communication
 
 **1.3 Link Maintenance**
 
-- **1.3.1 Data Structures**
-    - ID table - list of active connections with timestamps of last activity.
- 
-- **1.3.2 Description**
-    - Once a connection (1-way) is established through the advertisement, the connection is maintained until it needs to be discarded due to being stale or to make room for a new connection (only allowed up to 8 connections at a time). Note that the new connection should be timestamped after communication has taken place.
-    - The current location of a device is periodically shared through GATT (assuming a connection has been made). This acts as a ping or keepalive type of message to make sure the connection is still active. A timestamp of the most recent interaction over a connection will be kept.
-    - When a new connection needs to be established but a device is already maintaining the maximum number of connections, the connection with the smallest timestamp is replaced with the new connection (LRU replacement)
-    - Other replacement policies are possible as well
+Since GATT connections will disconnect when the connection becomes stale (no data transferred between two devices for 20 seconds on Android), location updates are sent frequently enough to prevent disconnections due to timeouts.
 
 **1.4 Send Message**
 
-- **1.4.1 Data Structures**
+Except for Small Messages, all message types have their header bytes and payload bytes place into separate characteristics. The header goes into the characteristic corresponding to that message's type, and the payload goes into a Pull characteristic. If a particular one-hop neighbor is indicated by upper layers of the network stack, then only that neighbor receives the notification for the changed (header) characteristic; otherwise, all neighbors are notified of the change. Once a receiving device decides it wants the message, it will read the data out of the Pull characteristic. If _t_ milliseconds have elapsed without any read attempts, then a new message can be sent (and can replace the contents of the Pull characteristic). 
 
-    - Message queue: Priority queue which stores messages to be sent. The priority is determined by the high priority (HP) bit as well as factors like age of message, TTL, destination, etc.
-    
-- **1.4.2 Small Message/Group Query/Group Feedback -- in advertisement -- DEPRECATED?**
-    - The payload fits within the <msg> field noted above in 1.1
-    - The advertisement is designated non-connectable as the contents of the message are completely contained within the advertisement.
-    - If a connection has already been established then the header and payload are both placed within the header characteristic and a notification is sent.
-- **1.4.3 Other Messages -- GATT signalling**
-    - PUSH: the header and payload are placed in the same characteristic and receivers are notified that an update has occurred.
-    - PULL: the header and payload are placed in separate characteristics. The receivers are notified of the update to the header. Upon reading the header, the receivers decide whether or not to read the payload.
-    - The node providing the data to be read will stop providing it after timeout of length t milliseconds ( after the last read takes place?)
-    - The push method is preferred for small payloads and/or when network traffic is low. When a payload becomes big enough or if the network traffic increases beyond an established threshold, the pull method is preferred.
-    - For more information on implementation details, see: [2], [3], [4], [5] (**comments by Jian**: I'll need to verify some of those on android, but the general idea makes sense.)
+With Small Messages, the entire payload fits within the 20 bytes allotted to a BLE packet (without renegotiating the MTU), thus the payload is sent along with the header in the notification.
 
 **1.5 Receive Message**
 
