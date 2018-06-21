@@ -144,9 +144,11 @@ payload, and the message length is greater than zero, a method to read from the 
 
 
 **1.6 Location Dissemination**
+
 There are a number of different approaches to disseminating location information throughout the network beyond flooding. Here are some of the following options inspired by current literature:
 
 Location updates are sent or forwarded based on the error estimate where the error is driven by:
+
     - the elapsed time since the last location update
     - the historical changes in the node's location
 
@@ -157,11 +159,14 @@ Location updates are sent or forwarded based on the velocity of the node.
 The above can be combined with hop or distance thresholds to decrease the frequency at which more distant nodes get updated about a particular node's location.
 
 The implementation that we will be following is:
+
     - Establish four zones (me, near, medium, far) based on radius from the current node each with their own difference threshold (D).
+
         - me: 0 hops
         - near: 1 hop
         - medium: 2 hops
         - far: >3 hops
+
     - A node tracks the last five locations for each node it has heard from (including itself).
     - The decision on whether to (re)broadcast is based on the root mean squared (RMS) / mean squared distance of the last five location readings (as a way to capture the tendency of GPS measurements to wobble near a particular location if standing still and what a deviation from this should look like). If no recent locations are available then the difference between the current location and the last location are used (with an initialized location of (0,0) which could be problematic if we are operating in the Gulf of Guinea)
     - The following thresholds will be used for determining when to (re)broadcast, but require further evaluation:
