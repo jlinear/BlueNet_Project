@@ -19,10 +19,15 @@ The Android installing package can be downloaded [here][apk].
 ## Functionality:
 The Dispatch app is designed with the following features:
 - Interactive Map View
+
 	The app is based on the view of google map. Users will be able to find nearby users and start a chat by clicking the user's icon. Joining geographical group is also done with the interatcion on the map.
+
 - BlueChat
+
 	The chat box allows user to send and receive messages both from single user or from multiple users in a named group or geographical group.
+
 - SOS Signal Dissemination
+
 	At the button of the map view, user can conveniently enter a short message and broadcast it to its neighbors. This is designed specifically for emergent cases.
 
 ## Demo:
