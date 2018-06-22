@@ -191,7 +191,7 @@ Messages are currently flooded in the network with only the message uniqueness t
 **1.8 Addressing** <a name="addressing"></a>
 
 - All nodes and groups have a unique 4 byte id
-- Note: Groups have not been thoroughly tested
+- **Note: Groups are not available in the current Dispatch app**
 - A group is a set of nodes (possibly empty), identified by a unique id that is either a Named Group or Geographic Group
     - A *Named Group* is simply a labelling mechanism to which a device can subscribe (a device could be part of group 'Blue' for instance)
     - A *Geographic Group* is a group that is associated with a circle (specified in meters) around a pair of coordinates.
@@ -218,13 +218,15 @@ The BlueNet class implements the following methods to be called by application l
 
 - `String getMyID()`: returns the BlueNet id of current device.
 - `int write(String destID, String input)`: used to send messages to the BlueNet device with destID.
-- `void regCallback(Result resultHandler)`: async triggered the pull-based read action upon receiving a notification of remote characteristic change.
+- `void regCallback(Result resultHandler)`: async callback for delivering content destined for the current node
 - `String[] getNeighbors()`: returns the id of surrounding BlueNet devices (including multi-hop devices).
-- `void setLocation(float latitude, float longitude)`: set the current location and passes to the data queue for transmitting.
+- `void setLocation(float latitude, float longitude)`: set the current location and initiates a request to share this with surrounding devices
 - `Coordinate getLocation(String id)`: returns the location of remote device of certain id.
-- `Group [] getGroups()`: returns the list of BlueNet groups that the current device is in.
+- `Group [] getGroups()`: returns the list of BlueNet groups that the current device has discovered.
 - `void addGroup()`: create a group by name or geographical area.
 - `boolean joinGroup(String id)` and `boolean leaveGroup(String id)`: join and leave a group by its group id.
+
+At the bottom of the stack are the BleReader and BleWriter which implement a GATT client and server, respectively. Each part continuously scans/advertises and tries to create GATT connections with surrounding devices. Both the client and server on a device keep track of GATT connections so that they can be reused rather than repeatedly going through a timely discovery process.
 
 ## Reference <a name="ref"></a>
 
