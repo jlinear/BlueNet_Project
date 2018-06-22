@@ -210,7 +210,21 @@ Messages are currently flooded in the network with only the message uniqueness t
 
 ## Android/Java App Development <a name="andr"></a>
 
-[TO BE FILLED SOON!]
+The BlueNet stack is included as a submodule of the Dispatch Android project. The application layer implements the BlueNet interface, and passes *Context* and *Activity* to BlueNet in `onCreate()` of the Activity. The BlueNet object is shared between activity and fragments via [EventBus][ebus].
+
+[ebus]: http://greenrobot.org/eventbus/documentation/how-to-get-started/ 
+
+The BlueNet class implements the following methods to be called by application layer:
+
+- `String getMyID()`: returns the BlueNet id of current device.
+- `int write(String destID, String input)`: used to send messages to the BlueNet device with destID.
+- `void regCallback(Result resultHandler)`: async triggered the pull-based read action upon receiving a notification of remote characteristic change.
+- `String[] getNeighbors()`: returns the id of surrounding BlueNet devices (including multi-hop devices).
+- `void setLocation(float latitude, float longitude)`: set the current location and passes to the data queue for transmitting.
+- `Coordinate getLocation(String id)`: returns the location of remote device of certain id.
+- `Group [] getGroups()`: returns the list of BlueNet groups that the current device is in.
+- `void addGroup()`: create a group by name or geographical area.
+- `boolean joinGroup(String id)` and `boolean leaveGroup(String id)`: join and leave a group by its group id.
 
 ## Reference <a name="ref"></a>
 
